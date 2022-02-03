@@ -1,7 +1,9 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -72,13 +74,35 @@ public class Arkanoid {
 	private static List<Actor> creaActores () {
 		List<Actor> actores = new ArrayList<Actor>();
 		
-		Nave n = new Nave(500, 250, 200, 20, null, 20);
-	
+		Nave n = new Nave(525, 300, 200, 20, null, 20);
+		
 		actores.add(n);
 		
-		Ladrillo l = new Ladrillo(10, 250, 30, 40, null);
+		Color[] color = new Color[6];
+		color[0]= Color.RED;
+		color[1]= Color.YELLOW;
+		color[2]= Color.PINK;
+		color[3]= Color.CYAN;
+		color[4]= Color.GREEN;
+		color[5]= Color.yellow;
 		
-		actores.add(l);
+				
+		Ladrillo l = null;
+		
+		int y = 5;
+		int x = 5;
+		int contador=6;
+		for (int i = 0; i < contador ; i++) {
+			for (int j = 0; j < 12; j++) {
+				l = new Ladrillo(y, x, 30, 60, null, color[i]);
+				actores.add(l);
+				x+=65;
+			}
+			y += 35;
+			x =5;
+			
+		}
+		
 		
 		// Creo los Monstruos del juego
 		

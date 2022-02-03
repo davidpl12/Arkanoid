@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Ladrillo extends Actor {
-
+	public Color color;
 	/**
 	 * 
 	 */
@@ -15,7 +15,7 @@ public class Ladrillo extends Actor {
 	 * @param g
 	 */
 	public void paint(Graphics g) {
-		g.setColor(Color.blue);
+		g.setColor(this.color);
 		g.fillRect(this.y, this.x, this.alto , this.ancho);
 	};
 
@@ -26,8 +26,9 @@ public class Ladrillo extends Actor {
 	 * @param alto
 	 * @param img
 	 */
-	public Ladrillo(int x, int y, int ancho, int alto, String img) {
+	public Ladrillo(int x, int y, int ancho, int alto, String img, Color color) {
 		super(x, y, ancho, alto, img);
+		this.color = color;
 	}
 
 	
