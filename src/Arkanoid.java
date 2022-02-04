@@ -1,6 +1,10 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -8,13 +12,21 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+
+
+
 public class Arkanoid {
 
 	private static final int FPS = 60;
+	private static MiCanvas canvas = null;
+	private static Arkanoid instance = null;
+	private static Nave n = null;
 
 	public static void main(String[] args) {
 		JFrame ventana = new JFrame("Arkanoid");
-		ventana.setBounds(0, 0, 800, 600);
+		ventana.setBounds(0, 0, 800, 675);
+
+		
 		
 		//Plantilla donde se colocan los objetos
 		ventana.getContentPane().setLayout(new BorderLayout());
@@ -25,27 +37,52 @@ public class Arkanoid {
 		//Creo nuevos canvas sobre los que dibujar
 		MiCanvas canvas = new MiCanvas(actores);
 		ventana.getContentPane().add(canvas, BorderLayout.CENTER);
+		
+		
+		
+		canvas.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				super.mouseMoved(e);
+				n.mover(e.getX());
+			}			
+		});
+		
+		// Desvío los eventos de teclado hasta el jugador
+		canvas.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				super.keyPressed(e);
+				n.keyPressed(e);
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				super.keyReleased(e);
+				n.keyReleased(e);
+			}
+		});
+		
+		
+		canvas.requestFocus();
 		// Consigo que la ventana no se redibuje por los eventos de Windows
 		ventana.setIgnoreRepaint(true);
 		// Hago que la ventana sea visible
 		ventana.setVisible(true);
-			
 		
-		// Hago que la ventana sea visible
-		ventana.setVisible(true);
 		
 		
 		// Comienzo un bucle, que consistir� en el juego completo.
-		int millisPorCadaFrame = 1000 / FPS ;
+		int millisPorCadaFrame = 1000 / FPS;
 		do {
 			// Redibujo la escena tantas veces por segundo como indique la variable FPS
 			// Tomo los millis actuales
 			long millisAntesDeProcesarEscena = new Date().getTime();
 			
 			// Redibujo la escena
-			canvas.repaint();
+			canvas.pintaEscena();
 			
-			// Recorro todos los actores, consiguiendo que cada uno de ellos actue
+			// Recorro todos los actores, consiguiendo que cada uno de ellos actúe
 			for (Actor a : actores) {
 				a.actua();
 			}
@@ -65,8 +102,15 @@ public class Arkanoid {
 		
 	}
 	
+	public static Arkanoid getInstance () {
+		if (instance == null) { // Si no está inicializada, se inicializa
+			instance = new Arkanoid();
+		}
+		return instance;
+	}
 	
-	
+
+		
 	/**
 	 * 
 	 * @return
@@ -74,7 +118,7 @@ public class Arkanoid {
 	private static List<Actor> creaActores () {
 		List<Actor> actores = new ArrayList<Actor>();
 		
-		Nave n = new Nave(525, 300, 200, 20, null, 20);
+		n = new Nave(350, 600, 150, 15, null, 20);
 		
 		actores.add(n);
 		
@@ -127,4 +171,10 @@ public class Arkanoid {
 		return (int) Math.round(Math.random() * (maximo - minimo) + minimo);
 	}
 
+	/**
+	 * @return the canvas
+	 */
+	public MiCanvas getCanvas() {
+		return canvas;
+	}
 }
