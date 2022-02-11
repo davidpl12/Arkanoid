@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
+
 public class Pelota extends Actor {
 
 	private int velocidadX = -5;
@@ -50,17 +51,33 @@ public class Pelota extends Actor {
 		// El monstruo se mueve de manera horizontal, en cada FPS
 		this.x += this.velocidadX;
 		// Si el monstruo abandona la escena por la izquierda o la derecha, rebota
-		if (this.x < 0 || this.x > 800) {
+		if (this.x < 0 || this.x > 770) {
 			this.velocidadX = -this.velocidadX;
 		}
 		
 		// Copiamos el esquema anterior para el movimiento vertical
 		this.y += this.velocidadY;
 		// Si el monstruo abandona la escena por la izquierda o la derecha, rebota
-		if (this.y < 0 || this.y > 600) {
+		if (this.y < 0 || this.y > 615) {
 			this.velocidadY = -this.velocidadY;
 		}
 		
+	}
+	
+	/**
+	 * Este metodo se dispara cuando un ladrillo colisione con la pelota
+	 */
+	public void colisionaCon(Actor a) {
+		super.colisionaCon(a);
+		// Si colisionamos con monstruo, eliminamos el disparo
+		if (a instanceof Ladrillo) {
+			//System.out.println("Pelota choca con ladrillo");
+			//Arkanoid.getInstance().eliminaActor(this);
+			this.velocidadY *= -1;
+		}
+		if (a instanceof Nave) {
+			this.velocidadY *= -1;
+		}
 	}
 
 	/**

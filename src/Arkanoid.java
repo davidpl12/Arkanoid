@@ -1,43 +1,42 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFrame;
 
 
 
-
 public class Arkanoid {
-
+	
+	private static List<Actor> actores = new ArrayList<Actor>();
 	private static final int FPS = 60;
 	private static MiCanvas canvas = null;
 	private static Arkanoid instance = null;
 	private static Nave n = null;
+	private static Pelota p = null;
+	
+	private static List<Actor> actoresParaEliminar = new ArrayList<Actor>();
 
 	public static void main(String[] args) {
 		JFrame ventana = new JFrame("Arkanoid");
 		ventana.setBounds(0, 0, 800, 675);
 
-		
-		
 		//Plantilla donde se colocan los objetos
 		ventana.getContentPane().setLayout(new BorderLayout());
 		
-		// Creo una lista de actores que intervendr√° en el juego.
+		// Creo una lista de actores que intervendr·n en el juego.
 		List<Actor> actores = creaActores();
 		
 		//Creo nuevos canvas sobre los que dibujar
 		MiCanvas canvas = new MiCanvas(actores);
 		ventana.getContentPane().add(canvas, BorderLayout.CENTER);
-		
 		
 		
 		canvas.addMouseMotionListener(new MouseAdapter() {
@@ -48,7 +47,7 @@ public class Arkanoid {
 			}			
 		});
 		
-		// Desv√≠o los eventos de teclado hasta el jugador
+		// DesvÌo los eventos de teclado hasta el jugador
 		canvas.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -75,6 +74,11 @@ public class Arkanoid {
 		// Comienzo un bucle, que consistir· en el juego completo.
 		int millisPorCadaFrame = 1000 / FPS;
 		do {
+			
+			// Por tanto, en este bucle compruebo constantemente si el canvas tiene el foco y, si no lo tiene, se lo doy
+			if (ventana.getFocusOwner() != null && !ventana.getFocusOwner().equals(canvas)) {
+				canvas.requestFocus();
+			}
 			// Redibujo la escena tantas veces por segundo como indique la variable FPS
 			// Tomo los millis actuales
 			long millisAntesDeProcesarEscena = new Date().getTime();
@@ -82,10 +86,14 @@ public class Arkanoid {
 			// Redibujo la escena
 			canvas.pintaEscena();
 			
-			// Recorro todos los actores, consiguiendo que cada uno de ellos act√∫e
+			// Recorro todos los actores, consiguiendo que cada uno de ellos actue
 			for (Actor a : actores) {
 				a.actua();
 			}
+			
+			detectaColisiones();
+			actualizaActores();
+			actoresParaEliminar.clear();
 			
 			// Calculo los millis que debemos parar el proceso, generando 60 FPS.
 			long millisDespuesDeProcesarEscena = new Date().getTime();
@@ -103,20 +111,19 @@ public class Arkanoid {
 	}
 	
 	public static Arkanoid getInstance () {
-		if (instance == null) { // Si no est√° inicializada, se inicializa
+		if (instance == null) { 
 			instance = new Arkanoid();
 		}
 		return instance;
 	}
 	
-
 		
 	/**
 	 * 
 	 * @return
 	 */
 	private static List<Actor> creaActores () {
-		List<Actor> actores = new ArrayList<Actor>();
+		actores = new ArrayList<Actor>();
 		
 		n = new Nave(350, 600, 150, 15, null, 20);
 		
@@ -138,7 +145,7 @@ public class Arkanoid {
 		int contador=6;
 		for (int i = 0; i < contador ; i++) {
 			for (int j = 0; j < 12; j++) {
-				l = new Ladrillo(y, x, 30, 60, null, color[i]);
+				l = new Ladrillo(x, y, 60, 30, null, color[i]);
 				actores.add(l);
 				x+=65;
 			}
@@ -147,13 +154,12 @@ public class Arkanoid {
 			
 		}
 		
-		
-		// Creo los Monstruos del juego
+		// Creo la pelota del juego
 		
 			int xAleatoria = numAleatorio(10, 500);
 			int yAleatoria = numAleatorio(10, 200);
 			
-			Pelota p = new Pelota(xAleatoria, yAleatoria, 20, 20, null, 10, 10);
+			p = new Pelota(xAleatoria, yAleatoria, 20, 20, null, 10, 10);
 			actores.add(p);
 		
 		
@@ -171,6 +177,74 @@ public class Arkanoid {
 		return (int) Math.round(Math.random() * (maximo - minimo) + minimo);
 	}
 
+
+	/**
+	 * Eliminar actores del juego
+	 * @param a
+	 */
+	public void eliminaActor (Actor a) {
+		Arkanoid.actoresParaEliminar.add(a);
+	}
+	
+	/**
+	 * Incorpora los actores nuevos al juego y elimina los que corresponden
+	 */
+	private static void actualizaActores () {
+		// Elimino los actores que se deben eliminar
+		for (Actor a : actoresParaEliminar) {
+			actores.remove(a);
+		}
+		actoresParaEliminar.clear(); // Limpio la lista de actores a eliminar, ya los he eliminado
+	}
+	
+	/**
+	 * Detecta colisiones entre actores e informa a los dos
+	 */
+	private static void detectaColisiones() {
+//		for (Actor actor1 : actores) {
+//			// Creo un rect√°ngulo para este actor.
+//			Rectangle rect1 = new Rectangle(actor1.getX(), actor1.getY(), actor1.getAncho(), actor1.getAlto());
+//			// Compruebo un actor con cualquier otro actor
+//			for (Actor p : actores) {
+//				// Evito comparar un actor consigo mismo, ya que eso siempre provocar· una colisiÛn y no tiene sentido
+//				if (!actor1.equals(p)) {
+//					// Formo el rectangulo de la pelota
+//					Rectangle rect2 = new Rectangle(p.getX(), p.getY(), p.getAncho(), p.getAlto());
+//					// Si los dos rect√°ngulos tienen alguna intersecci√≥n, notifico una colisiÛn en los dos actores
+//					if (rect1.intersects(rect2)) {
+//						actor1.colisionaCon(p); // El actor 1 colisiona con la pelota
+//						p.colisionaCon(actor1); // La pelota colisiona con el actor 1
+//						System.out.println("colisiona " + actor1 + " con " + p);
+//					}
+//				}
+//			}
+//		}
+
+		// Crea un rect·ngulo con los datos de la pelota
+		Rectangle rect1 = new Rectangle(p.getX(), p.getY(), p.getAncho(), p.getAlto());
+	
+		// pasa por todos los actores de la lista
+		for (Actor actor1 : actores) {
+			
+			// evita la propia pelota
+			if(!p.equals(actor1)) {
+			
+				// crea un rect·ngulo del actor
+				Rectangle rect2 = new Rectangle(actor1.getX(), actor1.getY(), actor1.getAncho(), actor1.getAlto());
+				
+				// Si intersecta envÌa notificaciÛn a los dos objetos
+				if(rect1.intersects(rect2)) {
+					p.colisionaCon(actor1);
+					actor1.colisionaCon(p);
+					System.out.println("colisiona " + actor1 + " con " + p);
+				}
+			}
+		}
+		
+		
+		
+	}
+	
 	/**
 	 * @return the canvas
 	 */
