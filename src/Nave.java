@@ -44,6 +44,8 @@ public class Nave extends Actor {
 	public void actua() {
 		if(izquierda) this.x -=velocidadX;
 		if(derecha) this.x +=velocidadX;
+		
+		mover(this.x);
 		}
 	
 	
@@ -54,8 +56,8 @@ public class Nave extends Actor {
 		MiCanvas canvas = Arkanoid.getInstance().getCanvas(); // Referencia al objeto Canvas usado
 		
 		// Compruebo si el jugador sale por la derecha
-		if (this.x > (675-40)) {
-			this.x = 675-40;
+		if (this.x > 635) {
+			this.x = 635;
 		}
 
 		// Compruebo si el jugador sale por la izquierda
@@ -77,15 +79,6 @@ public class Nave extends Actor {
 			derecha = true; break;
 		}
 		
-		// Compruebo si el jugador sale por la derecha
-		if (this.x > (675-40)) {
-			this.x = 675-40;
-		}
-
-		// Compruebo si el jugador sale por la izquierda
-		if (this.x < 0) {
-			this.x = 0;
-		}
 	}
 	
 	/**
@@ -99,15 +92,7 @@ public class Nave extends Actor {
 		case KeyEvent.VK_RIGHT:
 			derecha = false; break;
 		}
-		// Compruebo si el jugador sale por la derecha
-		if (this.x > (675-40)) {
-			this.x = 675-40;
-		}
 
-		// Compruebo si el jugador sale por la izquierda
-		if (this.x < 0) {
-			this.x = 0;
-		}
 	}
 	
 	/**
@@ -124,9 +109,7 @@ public class Nave extends Actor {
 		this.velocidadX = velocidadX;
 	}
 	
-	
-	
-	
+		
 	
 	
 	

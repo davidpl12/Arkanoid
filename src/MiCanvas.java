@@ -14,7 +14,7 @@ public class MiCanvas extends Canvas {
 	
 	List<Actor> actores = null;
 	
-	// BufferStrategy usado para conseguir la técnica de doble búffer
+	// BufferStrategy usado para conseguir la t�cnica de doble b�ffer
 	private BufferStrategy strategy = null;
 
 	
@@ -28,18 +28,18 @@ public class MiCanvas extends Canvas {
 
 
 	public void pintaEscena () {
-		// Tengo que inicializar el objeto "strategy" una única vez
+		// Tengo que inicializar el objeto "strategy" una unica vez
 		if (this.strategy == null) {
-			// El Canvas se dibujará en pantalla con una estrategia de doble búffer
+			// El Canvas se dibujar� en pantalla con una estrategia de doble búffer
 			this.createBufferStrategy(2);
-			// Obtengo una referencia a la estrategia de doble búffer.
+			// Obtengo una referencia a la estrategia de doble b�ffer.
 			strategy = getBufferStrategy();
-			// Resuelve un problema de sincronización de memoria de vídeo en Linux
+			// Resuelve un problema de sincronizaci�n de memoria de video en Linux
 			Toolkit.getDefaultToolkit().sync();			
 		}
 		// Obtengo el objeto gráfico que me permita pintar en el doble búffer
 		Graphics2D g = (Graphics2D)strategy.getDrawGraphics();
-		// Pinto un rectángulo negro que ocupe toda la escena
+		// Pinto un rect�ngulo negro que ocupe toda la escena
 		g.setColor(Color.black);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 

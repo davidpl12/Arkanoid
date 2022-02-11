@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 
+
 public abstract class Actor {
 
 	protected int x, y; // Coordenadas x e y del actor
@@ -29,6 +30,13 @@ public abstract class Actor {
 		this.img = img;
 	}
 	
+	/**
+	 * Método que se podrá sobrescribir en los subtipos para decidir la acción a realizar al colisionar
+	 * con otro actor
+	 * @param a
+	 */
+	public void colisionaCon(Actor a) {
+	}
 
 
 	/**
