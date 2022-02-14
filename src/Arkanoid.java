@@ -201,25 +201,6 @@ public class Arkanoid {
 	 * Detecta colisiones entre actores e informa a los dos
 	 */
 	private static void detectaColisiones() {
-//		for (Actor actor1 : actores) {
-//			// Creo un rect√°ngulo para este actor.
-//			Rectangle rect1 = new Rectangle(actor1.getX(), actor1.getY(), actor1.getAncho(), actor1.getAlto());
-//			// Compruebo un actor con cualquier otro actor
-//			for (Actor p : actores) {
-//				// Evito comparar un actor consigo mismo, ya que eso siempre provocar· una colisiÛn y no tiene sentido
-//				if (!actor1.equals(p)) {
-//					// Formo el rectangulo de la pelota
-//					Rectangle rect2 = new Rectangle(p.getX(), p.getY(), p.getAncho(), p.getAlto());
-//					// Si los dos rect√°ngulos tienen alguna intersecci√≥n, notifico una colisiÛn en los dos actores
-//					if (rect1.intersects(rect2)) {
-//						actor1.colisionaCon(p); // El actor 1 colisiona con la pelota
-//						p.colisionaCon(actor1); // La pelota colisiona con el actor 1
-//						System.out.println("colisiona " + actor1 + " con " + p);
-//					}
-//				}
-//			}
-//		}
-
 		// Crea un rect·ngulo con los datos de la pelota
 		Rectangle rect1 = new Rectangle(p.getX(), p.getY(), p.getAncho(), p.getAlto());
 	
@@ -236,7 +217,6 @@ public class Arkanoid {
 				if(rect1.intersects(rect2)) {
 					p.colisionaCon(actor1);
 					actor1.colisionaCon(p);
-					System.out.println("colisiona " + actor1 + " con " + p);
 				}
 			}
 		}
