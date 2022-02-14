@@ -34,15 +34,13 @@ public class Ladrillo extends Actor {
 	}
 
 	/**
-	 * Se disparara cuando un actor colisione con el monstruo
+	 * Se disparara cuando un actor colisione con el ladrillo
 	 */
 	public void colisionaCon(Actor a) {
 		super.colisionaCon(a);
-//		System.out.println("Ladrillo colisiona con: " + a);
-		// Si colisionamos con un player o un disparo, eliminamos al monstruo
+
+		// Si colisionamos con un player, eliminamos el ladrillo
 		if (a instanceof Pelota) {
-//			System.out.println("Elimino ladrillo: " + this);
-		//	System.out.println("al ladrillo le llega la pelota");
 			Arkanoid.getInstance().eliminaActor(this);
 		}
 	}

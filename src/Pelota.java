@@ -48,16 +48,16 @@ public class Pelota extends Actor {
 	 */
 	@Override
 	public void actua() {
-		// El monstruo se mueve de manera horizontal, en cada FPS
+		// La pelota se mueve de manera horizontal, en cada FPS
 		this.x += this.velocidadX;
-		// Si el monstruo abandona la escena por la izquierda o la derecha, rebota
+		// Si la pelota abandona la escena por la izquierda o la derecha, rebota
 		if (this.x < 0 || this.x > 770) {
 			this.velocidadX = -this.velocidadX;
 		}
 		
 		// Copiamos el esquema anterior para el movimiento vertical
 		this.y += this.velocidadY;
-		// Si el monstruo abandona la escena por la izquierda o la derecha, rebota
+		// Si la pelota abandona la escena por la izquierda o la derecha, rebota
 		if (this.y < 0 || this.y > 615) {
 			this.velocidadY = -this.velocidadY;
 		}
@@ -69,10 +69,8 @@ public class Pelota extends Actor {
 	 */
 	public void colisionaCon(Actor a) {
 		super.colisionaCon(a);
-		// Si colisionamos con monstruo, eliminamos el disparo
+
 		if (a instanceof Ladrillo) {
-			//System.out.println("Pelota choca con ladrillo");
-			//Arkanoid.getInstance().eliminaActor(this);
 			this.velocidadY *= -1;
 		}
 		if (a instanceof Nave) {
