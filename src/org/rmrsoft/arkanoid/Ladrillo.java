@@ -1,5 +1,8 @@
+package org.rmrsoft.arkanoid;
 import java.awt.Color;
 import java.awt.Graphics;
+
+
 
 
 
@@ -42,6 +45,8 @@ public class Ladrillo extends Actor {
 		// Si colisionamos con un player, eliminamos el ladrillo
 		if (a instanceof Pelota) {
 			Arkanoid.getInstance().eliminaActor(this);
+			ResourcesCache.getInstance().playSonido("explosion.wav");
+			Arkanoid.getInstance().incorporaNuevoActor(new Explosion(this.x, this.y));
 		}
 	}
 	

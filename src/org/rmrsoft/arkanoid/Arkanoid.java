@@ -1,3 +1,4 @@
+package org.rmrsoft.arkanoid;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -13,6 +14,7 @@ import javax.swing.JFrame;
 
 
 
+
 public class Arkanoid {
 	
 	private static List<Actor> actores = new ArrayList<Actor>();
@@ -23,8 +25,12 @@ public class Arkanoid {
 	private static Pelota p = null;
 	
 	private static List<Actor> actoresParaEliminar = new ArrayList<Actor>();
+	private static List<Actor> actoresParaIncorporar = new ArrayList<Actor>();
 
 	public static void main(String[] args) {
+		
+		ResourcesCache.getInstance().cargarRecursosEnMemoria();
+		
 		JFrame ventana = new JFrame("Arkanoid");
 		ventana.setBounds(0, 0, 800, 675);
 
@@ -125,7 +131,7 @@ public class Arkanoid {
 	private static List<Actor> creaActores () {
 		actores = new ArrayList<Actor>();
 		
-		n = new Nave(350, 600, 150, 15, null, 20);
+		n = new Nave(350, 600, 150, 15, Nave.IMAGEN_PLAYER, 20);
 		
 		actores.add(n);
 		
@@ -137,7 +143,7 @@ public class Arkanoid {
 		color[4]= Color.GREEN;
 		color[5]= Color.yellow;
 		
-				
+		
 		Ladrillo l = null;
 		
 		int y = 5;
@@ -177,7 +183,15 @@ public class Arkanoid {
 		return (int) Math.round(Math.random() * (maximo - minimo) + minimo);
 	}
 
+	/**
+	 * Método llamado para incorporar nuevos actores
+	 * @param a
+	 */
+	public void incorporaNuevoActor (Actor a) {
+		this.actoresParaIncorporar.add(a);
+	}
 
+	
 	/**
 	 * Eliminar actores del juego
 	 * @param a
@@ -185,17 +199,25 @@ public class Arkanoid {
 	public void eliminaActor (Actor a) {
 		Arkanoid.actoresParaEliminar.add(a);
 	}
+		
 	
 	/**
 	 * Incorpora los actores nuevos al juego y elimina los que corresponden
 	 */
 	private static void actualizaActores () {
+		// Incorporo los nuevos actores
+		for (Actor a : actoresParaIncorporar) {
+			actores.add(a);
+		}
+		actoresParaIncorporar.clear(); // Limpio la lista de actores a incorporar, ya están incorporados
+		
 		// Elimino los actores que se deben eliminar
 		for (Actor a : actoresParaEliminar) {
 			actores.remove(a);
 		}
 		actoresParaEliminar.clear(); // Limpio la lista de actores a eliminar, ya los he eliminado
 	}
+	
 	
 	/**
 	 * Detecta colisiones entre actores e informa a los dos

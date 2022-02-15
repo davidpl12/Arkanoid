@@ -1,9 +1,13 @@
+package org.rmrsoft.arkanoid;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 
 public class Nave extends Actor {
+	
+	//Propiedades estáticas de esta clase
+		public static String IMAGEN_PLAYER = "naveArkanoid.gif";
 
 	private int velocidadX = -5;
 	private boolean izquierda =false;
@@ -14,7 +18,6 @@ public class Nave extends Actor {
 	 */
 	public Nave() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -27,17 +30,18 @@ public class Nave extends Actor {
 	public Nave(int x, int y, int ancho, int alto, String img, int velocidadX) {
 		super(x, y, ancho, alto, img);
 		this.velocidadX = velocidadX;
+		this.setSpriteActual(ResourcesCache.getInstance().getImagen(ResourcesCache.IMAGEN_PLAYER));
 	}
 	
 	/**
 	 * 
 	 * @param g
 	 */
-	public void paint(Graphics g) {
-		g.setColor(Color.ORANGE);
-		g.fillRect(this.x, this.y, this.ancho , this.alto);
-	};
-	
+//	public void paint(Graphics g) {
+//		g.setColor(Color.ORANGE);
+//		g.fillRect(this.x, this.y, this.ancho , this.alto);
+//	};
+//	
 	/**
 	 * 
 	 */
