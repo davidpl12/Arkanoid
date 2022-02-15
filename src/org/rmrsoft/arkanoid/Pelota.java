@@ -1,3 +1,4 @@
+package org.rmrsoft.arkanoid;
 import java.awt.Color;
 import java.awt.Graphics;
 
